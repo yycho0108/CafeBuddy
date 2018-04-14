@@ -6,10 +6,11 @@ from flask import Flask
 from flask import render_template
 from flask import request
 import models as dbHandler
-
-import pandas as pd
-from flask_sqlalchemy import SQLAlchemy
 import psycopg2
+
+#import pandas as pd
+from flask_sqlalchemy import SQLAlchemy
+
 
 
 app = Flask(__name__)
@@ -17,13 +18,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ipbifgmvvhliav:4f013680ded45
 db = SQLAlchemy(app)
 
 class People(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     type = db.Column(db.String(80))
 
-    def __init__(self,name,type):
+    def __init__(self, name, type_):
         self.name = name
-        self.type = type
+        self.type_ = type_
     
     def __repr__(self):
         return'<User %r' % self.name
@@ -34,18 +35,25 @@ def hello_world():
 
 @app.route('/kate', methods=['POST', 'GET'])
 def kate_page():
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         dbHandler.insertUser(username, password)
         users = dbHandler.retrieveUsers()
-    conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
-        user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
+    con = psycopg2.connect(dbname='d2mo1re4fcqlhr', user='ipbifgmvvhliav', host='ec2-107-20-151'
+                                                                                '-189.compute-1.amazonaws.com',
+                           password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
     # conn.row_factory = sql.Row
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM people")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM users")
 
-    return render_template("kate.html", items = cur.fetchall())
+    return render_template("kate.html", items=cur.fetchall())
+
+    cur.close()
+    con.close()
+
+
     # cur.close()
     # conn.close()
     # df = pd.read_csv('people')
