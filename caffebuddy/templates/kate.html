@@ -11,9 +11,9 @@
 
          {% for item in items %}
             <tr>
-               <td>{{first_name}}</td>
-               <td>{{last_name}}</td>
-               <td>{{table_no}}</td>
+               <td>{{item.first_name}}</td>
+               <td>{{item.last_name}}</td>
+               <td>{{item.table_no}}</td>
             </tr>
          {% endfor %}
       </table>
