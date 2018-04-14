@@ -29,10 +29,6 @@ class People(db.Model):
     def __repr__(self):
         return'<User %r' % self.name
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
 @app.route('/kate', methods=['POST', 'GET'])
 def kate_page():
 
