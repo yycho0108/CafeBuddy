@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>KATE</title>
+<!doctype html>
+<html>
+   <body>
 
-</head>
-<body>
-{{ data|safe }}
-</body>
+      <table border = 1>
+         <thead>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Table No</td>
+         </thead>
+
+         {% for item in items %}
+            <tr>
+               <td>{{first_name}}</td>
+               <td>{{last_name}}</td>
+               <td>{{table_no}}</td>
+            </tr>
+         {% endfor %}
+      </table>
+
+      <a href = "/">Go back to home page</a>
+
+   </body>
 </html>
