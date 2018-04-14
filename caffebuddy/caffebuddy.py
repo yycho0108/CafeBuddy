@@ -28,6 +28,8 @@ class People(db.Model):
     def __repr__(self):
         return'<User %r' % self.name
 
+class 
+
 
 @app.route('/')
 def hello_world():
@@ -54,6 +56,9 @@ def kate_page():
     # return df.to_html()
     # return "kates page"
 
+# @app.route('/post_user', methods=['POST'])
+# def post_user():
+#     user = User(request.form[''])
 
 @app.route('/login', methods=['POST', 'GET'])
 def home():
