@@ -28,16 +28,19 @@ class People(db.Model):
     def __repr__(self):
         return'<User %r' % self.name
 
-class 
-
-
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
 @app.route('/kate', methods=['POST', 'GET'])
 def kate_page():
-    conn = sqlite3.connect("cafebuddy.db")
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        dbHandler.insertUser(username, password)
+        users = dbHandler.retrieveUsers()
+    conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
+        user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
     # conn.row_factory = sql.Row
     cur = conn.cursor()
     cur.execute("SELECT * FROM people")
