@@ -103,6 +103,7 @@ def open_table():
         result = request.form
         global table_no
         table_no=result["TableNumber"]
+        print("table no set",table_no)
 
     else: 
         conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
@@ -141,12 +142,6 @@ def exit():
         print(query)
         cur.execute(query)
         conn.commit()
-
-        cur.execute("select * from people")
-
-        rows = cur.fetchall();
-        for row in rows:
-            print(row)
 
         cur.close()
         conn.close()
