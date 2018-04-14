@@ -33,7 +33,7 @@ def sort_table(pref, tables):
     sort table by the scoring metric
     returns [(score[i], table_id[i]) for i in range(n)]
     """
-    scores = [table_score(pref, table) for table in tables.itervalues()]
+    scores = [table_score(pref, table) for _, table in tables.items()]
     return sorted(zip(scores, tables.iterkeys()), reverse=True)
 
 def test():
