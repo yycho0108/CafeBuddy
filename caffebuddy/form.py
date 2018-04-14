@@ -19,7 +19,7 @@ def preferences():
             # remove_from_database()
             print(request.form['category'])
             print(request.form['person'])
-        else:
+        elif request.form['submit'] == "Add":
             #add_to_database()
             print(request.form['category'])
             print(request.form['new_person'])
