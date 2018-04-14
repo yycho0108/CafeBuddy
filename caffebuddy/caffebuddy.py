@@ -79,7 +79,7 @@ def kate_page():
 # def post_user():
 #     user = User(request.form[''])
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
 def home():
     if request.method == 'POST':
         username = request.form['username']
