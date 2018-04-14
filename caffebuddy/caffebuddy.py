@@ -29,7 +29,7 @@ class People(db.Model):
     def __repr__(self):
         return'<User %r' % self.name
 
-@app.route('/kate', methods=['POST', 'GET'])
+@app.route('/list_of_tables', methods=['POST', 'GET'])
 def kate_page():
 
     if request.method == 'POST':
@@ -46,16 +46,18 @@ def kate_page():
 
 
     people = cur.fetchall()
-    people_friendlevel = []
+    table_map = {}
     for p in people:
         cur.execute("SELECT type_people FROM people WHERE name LIKE '%{}%'".format(p[1]))
-        people_friendlevel.append((*p, *cur.fetchone()))
+        people_list = table_map.get(p[2], [])
+        people_list.append((p[1], *cur.fetchone()))
+        table_map[p[2]] = people_list
 
 
     cur.close()
     con.close()
-    print(people_friendlevel)
-    return render_template("kate.html", items=people_friendlevel)
+    print(table_map)
+    return render_template("list_tables.html", all_tables=table_map)
 
 
     # cur.close()

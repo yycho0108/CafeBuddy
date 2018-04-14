@@ -12,7 +12,25 @@
         <option value="Activity">Activity</option>
       </select>
 
-      <table border = 1>
+      <ul>
+         {% for table_no, people in all_tables.items() %}
+            <li>
+               Table {{table_no}}
+               <ul>
+                  {% for p in people %}
+                     <li>
+                        {{p[0]}}
+                        <ul>
+                           <li>{{p[1]}}</li>
+                        </ul>
+                     </li>
+                  {% endfor %}
+               </ul>
+            </li>
+         {% endfor %}
+      </ul>
+
+<!--       <table border = 1>
          <thead>
             <td>Name</td>
             <td>Table</td>
@@ -27,7 +45,7 @@
             </tr>
          {% endfor %}
       </table>
-
+ -->
       <a href = "/">Go back to home page</a>
 
    </body>
