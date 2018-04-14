@@ -10,7 +10,7 @@ def hello_world():
 
 @app.route('/kate')
 def kate_page():
-    conn = sqlite3.connect("C:/Users/murta/PycharmProjects/caffebuddy/cafebuddy.db")
+    conn = sqlite3.connect("cafebuddy.db")
     # conn.row_factory = sql.Row
     cur = conn.cursor()
     cur.execute("SELECT * FROM people")
