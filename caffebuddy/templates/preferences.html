@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Preferences</title>
+        <link href="static/style.css" rel="stylesheet" type="text/css" media="all">
+        <script src="https://code.jquery.com/jquery-3.3.1.js"
+                integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+                crossorigin="anonymous"></script>
+        <script lang="javascript">
+
+        var data = {{ data | safe }}
+
+        $(document).ready(function(){
+            var cat = $("select#category");
+            var keys = Object.keys(data);
+            console.log(keys);
+            keys.forEach(function(k){
+                var opt = "<option value='"+k+"'>"+k+"</option>"
+                cat.append(opt)
+            });
+
+            // select one default
+            $('select#category option:eq(1)').prop('selected', true);
+            updateCategory();
+        });
+
+        function updateCategory(){
+            var cat = $("select#category option:selected").val();
+
+            var sel = $("select#person");
+            sel.empty();
+            data[cat].forEach(function(d){
+                var opt = "<option value='"+d+"'>"+d+"</option>"
+                sel.append(opt)
+            })
+        }
+        </script>
+    </head>
+    <body>
+        <form action="" method="POST">
+            <div id="social">
+                <h2>Social</h2>
+                <!-- categories -->
+                Category
+                <select name="category" onchange="updateCategory()" id="category">
+                </select>
+                <br>
+
+                <!-- remove -->
+                <div id="remove">
+                    <h3>Remove</h3>
+                    <select name="person" class="" id="person">
+                        <option value=""></option> <!-- null option -->
+                        {% for p in person %}
+                        <option value="{{ p.name }}">{{ p.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" name="submit" value="Remove">
+                </div>
+
+                <!-- add -->
+                <div id="add">
+                    <h3>Add</h3>
+                    <input type="text" name="new_person">
+                    <input type="submit" name="submit" value="Add">
+                </div>           
+            </div>
+
+
+            <!-- weights -->
+            <div id="weights">
+                <h2>Weights</h2>
+                {% for k, v in weight.iteritems() %}
+                {{ k }}
+                <input type="number" value="{{ v }}" step="1" id="{{ k }}"/>
+                <br>
+                {% endfor %}
+                <input type="submit" name="weight_submit" value="Submit Weight">
+            </div>
+        </form>
+    </body>
+</html>

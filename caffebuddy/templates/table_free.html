@@ -2,16 +2,22 @@
 <html>
     <head>
         <title>Table</title>
+        <link href="static/style.css" rel="stylesheet" type="text/css" media="all">
     </head>
     <body>
-        Names <br>
-        <input type="text" id="name1"><br>
-        <input type="text" id="name2"><br>
-        <input type="text" id="name3"><br>
-        <input type="text" id="name4"><br>
-        Would you like to sit with others? <br>
-    <!-- on click - next page -->
-        <button type="button" onclick="" id="sit-with-others">Yes</button>
-        <button type="button" onclick="" id="sit-alone">No</button>
+    <form action = "/exit/{{table_no}}" method = "POST">
+            Names <br>
+           <p><input type = "text" name = "Name1" /></p>
+           <p><input type = "text" name = "Name2" /></p>
+           <p><input type = "text" name = "Name3" /></p>
+           <p><input type = "text" name = "Name4" /></p>
+            Would you like to sit with others? <br>
+            <input type="radio" name="sit" value="sit-with-others"> Yes<br>
+            <input type="radio" name="sit" value="sit-alone"> No<br>
+            <p><input type = "submit" value = "submit" /></p>
+        </form>
     </body>
 </html>
+
+
+
