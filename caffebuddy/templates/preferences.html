@@ -70,7 +70,7 @@
             <!-- weights -->
             <div id="weights">
                 <h2>Weights</h2>
-                {% for k, v in weight.iteritems() %}
+                {% for k, v in weight.items() %}
                 {{ k }}
                 <input type="number" value="{{ v }}" step="1" id="{{ k }}"/>
                 <br>
