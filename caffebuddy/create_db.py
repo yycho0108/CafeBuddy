@@ -1,6 +1,9 @@
 import sqlite3
+import psycopg2
 
-conn = sqlite3.connect("/Users/vadimcastro/Desktop/katePerkins/CafeBuddy/caffebuddy/cafebuddy.db")
+
+conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
+    user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
 print("db created successfully")
 
 cur = conn.cursor()
@@ -14,11 +17,11 @@ cur = conn.cursor()
 #                 "('Kimberly', 'Winter', 6)")
 
 
-# cur.execute("create table users ("
-#             "id integer primary key autoincrement,"
-#             "username text not null,"
-#             "password text not null"
-#             ");")
+cur.execute("create table seating ("
+            "id serial primary key,"
+            "name text not null,"
+            "table_no integer"
+            ");")
 
 
 
