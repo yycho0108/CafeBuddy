@@ -39,6 +39,7 @@ class People(db.Model):
     
     def __repr__(self):
         return'<User %r' % self.name
+# ^^ Deprecated
 
 @app.route('/list_of_tables', methods=['POST', 'GET'])
 def kate_page():
