@@ -283,5 +283,9 @@ def meatsauce():
 def pesto():
     return render_template("pesto.html")
 
+@app.route('/nav')
+def printNav(directions):
+    return render_template('nav.html', directions=directions)
+
 if __name__ == '__main__':
     app.run()
