@@ -15,6 +15,10 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ipbifgmvvhliav:4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e@ec2-107-20-151-189.compute-1.amazonaws.com:5432/d2mo1re4fcqlhr'
+# ^^NO NEED TO, AND SHOULD AVOID, HARDCODING URL IN CODE:
+#DATABASE_URL = os.environ['DATABASE_URL']
+# check with heroku config
+
 db = SQLAlchemy(app)
 
 class People(db.Model):
