@@ -14,6 +14,7 @@ import json
 
 #import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
+from score import sort_table
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ipbifgmvvhliav:4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e@ec2-107-20-151-189.compute-1.amazonaws.com:5432/d2mo1re4fcqlhr'
@@ -53,9 +54,34 @@ def kate_page():
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     cur.execute("SELECT * FROM seating")
+    people = cur.fetchall() # [(id, name, table_no)]
 
+    cur.execute("SELECT name, relationship FROM people_attr")
+    res = cur.fetchall()
 
-    people = cur.fetchall()
+    # scoring ...
+    pref = {}
+    for name, rel in res:
+        rel = rel.lower()
+        rels = pref.get(rel, [])
+        rels.append(name)
+        pref[rel] = rels
+    pref['weight'] = {
+            'friend' : 2,
+            'acquaintance' : 1,
+            'empty'  : 0,
+            'stranger' : -1,
+            'enemy' : -2
+    }
+
+    table={}
+    for (pid, name, table_no) in people:
+        t = table.get(table_no, {'person':[]})
+        t['person'].append(name)
+        table[table_no] = t
+    rank = sort_table(pref, table)
+    #print(rank)
+
     table_map = {}
     for p in people:
         cur.execute("SELECT relationship, class_year, major, misc FROM people_attr WHERE name LIKE '%{}%'".format(p[1]))
@@ -67,6 +93,9 @@ def kate_page():
     cur.close()
     conn.close()
     print(table_map)
+
+    # reorder table_map ...
+    table_map = [ (tno,table_map[tno]) for (score,tno) in rank]
     return render_template("list_tables.html", all_tables=table_map)
 
 

@@ -5,30 +5,36 @@ def table_score(person, table):
     """
     table_person = set(table['person'])
 
-    friend = set(person['friend']).intersection(table_person)
-    acquaintance = set(person['friend']).intersection(table_person)
-    enemy = set(person['friend']).intersection(table_person)
+    friend = set(person.get('friend', [])).intersection(table_person)
+    acquaintance = set(person.get('acquaintance', [])).intersection(table_person)
+    enemy = set(person.get('enemy', [])).intersection(table_person)
 
-    preference = person['preference']
+    # default weight
+    weight = person.get('weight', { 
+        'friend' : 2,
+        'acquaintance' : 1,
+        'empty'  : 0,
+        'stranger' : -1,
+        'enemy' : -2
+        })
 
     if len(table_person) == 0:
-        return preference['empty']
+        return weight['empty']
     else:
         score = 0
-        score += len(friend) * preference['friend']
-        score += len(acquaintance) * preference['acquaintance']
-        score += len(enemy) * preference['enemy']
+        score += len(friend) * weight['friend']
+        score += len(acquaintance) * weight['acquaintance']
+        score += len(enemy) * weight['enemy']
         n_stranger = len(table_person) - len(friend) - len(acquaintance) - len(enemy)
-        score += n_stranger * preference['stranger']
         return score
 
-def sort_table(person, tables):
+def sort_table(pref, tables):
     """
     sort table by the scoring metric
     returns [(score[i], table_id[i]) for i in range(n)]
     """
-    scores = [table_score(person, table) for table in tables.itervalues()]
-    return sorted(zip(scores, tables.iterkeys()))
+    scores = [table_score(pref, table) for table in tables.itervalues()]
+    return sorted(zip(scores, tables.iterkeys()), reverse=True)
 
 def test():
     table_data = {
@@ -48,7 +54,7 @@ def test():
             'friend' : ['a','b','c','d'],
             'acquaintance' : ['e','f','g'], # or other features, like "classes"
             'enemy' : ['h'],
-            'preference' : { # preference score
+            'weight' : { # preference score
                 'friend' : 2,
                 'acquaintance' : 1,
                 'empty'  : 0,
