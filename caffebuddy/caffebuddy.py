@@ -91,19 +91,19 @@ def home():
     else:
         return render_template('index.html')
 
-table_no = 0
+# table_no = 0
 
 @app.route('/table')
 def new_table():
     return render_template('table.html')
 
-@app.route('/open_table',methods = ['POST', 'GET'])
+@app.route('/open_table/<int:table_no>',methods = ['POST', 'GET'])
 def open_table():
     if request.method == 'POST':
         result = request.form
-        global table_no
-        table_no=result["TableNumber"]
-        print("table no set",table_no)
+        # global table_no
+        # table_no=result["TableNumber"]
+        # print("table no set",table_no)
 
     else: 
         conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
@@ -117,7 +117,7 @@ def open_table():
 
         cur.close()
         conn.close()
-    return render_template('table_free.html')
+    return render_template('table_free.html', table_no=table_no)
 
 @app.route('/result',methods = ['POST', 'GET'])
 def result():
@@ -125,7 +125,7 @@ def result():
         result = request.form
         return render_template("result.html",result = result)
 
-@app.route('/exit',methods = ['POST', 'GET'])
+@app.route('/exit/<int:table_no>',methods = ['POST', 'GET'])
 def exit():
     if request.method == 'POST':
         result = request.form
@@ -145,7 +145,7 @@ def exit():
 
         cur.close()
         conn.close()
-        return render_template("exit.html",exit = exit)
+        return render_template("exit.html",table_no=table_no)
 
 
 @app.route('/preferences',methods = ['POST', 'GET'])
