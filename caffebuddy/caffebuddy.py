@@ -15,8 +15,6 @@ import json
 #import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ipbifgmvvhliav:4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e@ec2-107-20-151-189.compute-1.amazonaws.com:5432/d2mo1re4fcqlhr'
 DATABASE_URL = os.environ['DATABASE_URL']
@@ -166,17 +164,6 @@ def preferences():
     cur.execute("SELECT name, relationship FROM people_attr")
     res = cur.fetchall()
 
-    data = {
-            'friend' : [],
-            'acquaintance' : [],
-            'enemy' : []
-            }
-    for name, rel in res:
-        rel = rel.lower()
-        if rel in data.keys():
-            data[rel].append(name)
-    data = json.dumps(data)
-
     if request.method == 'POST':
         form = request.form
         if form['submit'] == "Remove":
@@ -188,6 +175,21 @@ def preferences():
                 .format(form['new_person'], form['category'])
             cur.execute(query)
             conn.commit()
+        elif form['submit'] == "Weight":
+            # TODO : handle weight modifications
+            pass
+
+    # most recent data
+    data = {
+            'friend' : [],
+            'acquaintance' : [],
+            'enemy' : []
+            }
+    for name, rel in res:
+        rel = rel.lower()
+        if rel in data.keys():
+            data[rel].append(name)
+    data = json.dumps(data)
 
     cur.close()
     conn.close()
