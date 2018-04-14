@@ -24,9 +24,6 @@ class People(db.Model):
 def hello_world():
     return 'Hello World!'
 
-<<<<<<< HEAD
-#
-=======
 @app.route('/kate')
 def kate_page():
     conn = sqlite3.connect("cafebuddy.db")
@@ -47,7 +44,6 @@ def kate_page():
     # return render_template('kate.html', user=user_details)
     # return df.to_html()
     # return "kates page"
->>>>>>> b60a740727fc83c866d98aaff9174f6a2cce3d30
 
 if __name__ == '__main__':
     app.run()
