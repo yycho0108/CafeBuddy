@@ -175,8 +175,9 @@ def preferences():
             'enemy' : -2
             }
         )
-@app.route('menu')
-	return render_template(menu.html)
+@app.route('/menu')
+def menu():
+    return render_template("menu.html")
 
 if __name__ == '__main__':
     app.run()
