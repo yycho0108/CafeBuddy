@@ -15,19 +15,15 @@ def open_table():
         result = request.form
         global table_no
         table_no=result["TableNumber"]
-    conn = sqlite3.connect("cafebuddy.db")
+
+    conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
+        user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
     cur = conn.cursor()
     query = "DELETE FROM people WHERE table_no = {}".format(table_no)
     print(query)
     cur.execute(query)
 
     conn.commit()
-
-    cur.execute("select * from people")
-
-    rows = cur.fetchall();
-    for row in rows:
-        print(row)
 
     cur.close()
     conn.close()
@@ -43,7 +39,8 @@ def result():
 def exit():
     if request.method == 'POST':
         result = request.form
-        conn = sqlite3.connect("cafebuddy.db")
+        conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
+            user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
         cur = conn.cursor()
         people = []
         for key, value in result.items():
@@ -52,7 +49,7 @@ def exit():
                 people.append("('{}', '{}', {})".format(fn, ln, table_no))
 
         entries = ",".join(people)
-        query = "INSERT INTO people (first_name,last_name, table_no) VALUES {}".format(entries)
+        query = "INSERT INTO seating (name, table_no) VALUES {}".format(entries)
         print(query)
         cur.execute(query)
         conn.commit()
