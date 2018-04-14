@@ -217,5 +217,25 @@ def pancakes():
 def bacon():
 	return render_template("bacon.html")
 
+@app.route('/fruit')
+def fruit():
+    return render_template("fruit.html")
+
+@app.route('/tenders')
+def tenders():
+    return render_template("tenders.html")
+
+@app.route('/vegburg')
+def vegburg():
+    return render_template("vegburg.html")
+
+@app.route('/pizza')
+def pizza():
+    return render_template("pizza.html")
+
+@app.route('/pasta')
+def pasta():
+    return render_template("pasta.html")
+
 if __name__ == '__main__':
     app.run()
