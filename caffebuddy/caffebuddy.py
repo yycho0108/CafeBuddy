@@ -67,7 +67,8 @@ def kate_page():
     cur.close()
     conn.close()
     print(table_map)
-    return render_template("list_tables.html", all_tables=table_map)
+    empty_tables = [i for i in range(1, 10) if i not in table_map]
+    return render_template("list_tables.html", all_tables=table_map, empty_tables=empty_tables)
 
 
     # cur.close()

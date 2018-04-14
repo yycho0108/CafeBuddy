@@ -5,6 +5,8 @@
         <link href="static/style.css" rel="stylesheet" type="text/css" media="all">
     </head>
    <body>
+
+       <h1>Tables Available</h1>
        <a href="preferences">Preferences</a>
        <!--
       <select>
@@ -13,7 +15,7 @@
         <option value="Activity">Activity</option>
       </select>
        -->
-
+       <h2>Tables with People</h2>
       <ul>
          {% for table_no, people in all_tables.items() %}
             <li>
@@ -34,22 +36,13 @@
          {% endfor %}
       </ul>
 
-<!--       <table border = 1>
-         <thead>
-            <td>Name</td>
-            <td>Table</td>
-            <td>Type</td>
-         </thead>
+      <h2>Empty Tables</h2>
+      <ul>
+          {% for i in empty_tables %}
+            <li> Table {{i}} </li>
+          {% endfor %}
+      </ul>
 
-         {% for item in items %}
-            <tr>
-               <td>{{item[1]}}</td>
-               <td>{{item[2]}}</td>
-               <td>{{item[3]}}</td>
-            </tr>
-         {% endfor %}
-      </table>
- -->
       <a href = "/">Go back to home page</a>
 
    </body>
