@@ -95,7 +95,7 @@ def kate_page():
     print(table_map)
     # reorder table_map ...
     table_map = [ (tno,table_map[tno]) for (score,tno) in rank]
-    empty_tables = [i for i in range(1, 10) if i not in zip(*table_map)[0]]
+    empty_tables = [i for i in range(1, 10) if i not in list(zip(*table_map))[0]]
     return render_template("list_tables.html", all_tables=table_map, empty_tables=empty_tables)
 
 
