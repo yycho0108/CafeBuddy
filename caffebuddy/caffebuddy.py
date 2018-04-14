@@ -238,5 +238,21 @@ def pizza():
 def pasta():
     return render_template("pasta.html")
 
+@app.route('/alfredo')
+def alfredo():
+    return render_template("alfredo.html")
+
+@app.route('/diavolo')
+def diavolo():
+    return render_template("diavolo.html")
+
+@app.route('/meatsauce')
+def meatsauce():
+    return render_template("meatsauce.html")
+
+@app.route('/pesto')
+def meatsauce():
+    return render_template("pesto.html")
+
 if __name__ == '__main__':
     app.run()
