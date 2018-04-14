@@ -34,7 +34,7 @@ def sort_table(pref, tables):
     returns [(score[i], table_id[i]) for i in range(n)]
     """
     scores = [table_score(pref, table) for _, table in tables.items()]
-    return sorted(zip(scores, tables.iterkeys()), reverse=True)
+    return sorted(zip(scores, tables.keys()), reverse=True)
 
 def test():
     table_data = {
