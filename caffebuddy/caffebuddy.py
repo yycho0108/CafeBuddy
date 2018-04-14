@@ -48,9 +48,9 @@ def kate_page():
     people = cur.fetchall()
     table_map = {}
     for p in people:
-        cur.execute("SELECT type_people FROM people WHERE name LIKE '%{}%'".format(p[1]))
+        cur.execute("SELECT relationship, class_year, major, misc FROM people_attr WHERE name LIKE '%{}%'".format(p[1]))
         people_list = table_map.get(p[2], [])
-        people_list.append((p[1], *cur.fetchone()))
+        people_list.append((p[1], cur.fetchone()))
         table_map[p[2]] = people_list
 
 

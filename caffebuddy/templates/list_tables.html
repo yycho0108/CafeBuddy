@@ -21,7 +21,9 @@
                      <li>
                         {{p[0]}}
                         <ul>
-                           <li>{{p[1]}}</li>
+                           {% for attr in p[1] %}
+                              <li>{{attr}}</li>
+                           {% endfor %}
                         </ul>
                      </li>
                   {% endfor %}
