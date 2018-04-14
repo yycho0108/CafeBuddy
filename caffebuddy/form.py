@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import json
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/open_table')
 def student():
    return render_template('table_free.html')
 
