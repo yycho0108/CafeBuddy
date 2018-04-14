@@ -11,5 +11,12 @@ def result():
       result = request.form
       return render_template("result.html",result = result)
 
+@app.route('/exit',methods = ['POST', 'GET'])
+def exit():
+   if request.method == 'POST':
+      result = request.form
+      return render_template("exit.html",exit = exit)
+
+
 if __name__ == '__main__':
-   app.run(debug = True)
+   app.run(debug = True) 
