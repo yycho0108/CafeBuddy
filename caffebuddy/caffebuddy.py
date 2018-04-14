@@ -93,10 +93,10 @@ def kate_page():
     cur.close()
     conn.close()
     print(table_map)
-
     # reorder table_map ...
     table_map = [ (tno,table_map[tno]) for (score,tno) in rank]
-    return render_template("list_tables.html", all_tables=table_map)
+    empty_tables = [i for i in range(1, 10) if i not in zip(*table_map)[0]]
+    return render_template("list_tables.html", all_tables=table_map, empty_tables=empty_tables)
 
 
     # cur.close()
@@ -246,6 +246,42 @@ def pancakes():
 @app.route('/bacon')
 def bacon():
 	return render_template("bacon.html")
+
+@app.route('/fruit')
+def fruit():
+    return render_template("fruit.html")
+
+@app.route('/tenders')
+def tenders():
+    return render_template("tenders.html")
+
+@app.route('/vegburg')
+def vegburg():
+    return render_template("vegburg.html")
+
+@app.route('/pizza')
+def pizza():
+    return render_template("pizza.html")
+
+@app.route('/pasta')
+def pasta():
+    return render_template("pasta.html")
+
+@app.route('/alfredo')
+def alfredo():
+    return render_template("alfredo.html")
+
+@app.route('/diavolo')
+def diavolo():
+    return render_template("diavolo.html")
+
+@app.route('/meatsauce')
+def meatsauce():
+    return render_template("meatsauce.html")
+
+@app.route('/pesto')
+def pesto():
+    return render_template("pesto.html")
 
 if __name__ == '__main__':
     app.run()
