@@ -7,10 +7,14 @@ table_no = 0
 
 @app.route('/table')
 def new_table():
-    pass
+    return render_template('table.html')
 
-@app.route('/open_table')
+@app.route('/open_table',methods = ['POST', 'GET'])
 def open_table():
+    if request.method == 'POST':
+        result = request.form
+        global table_no
+        table_no=result["TableNumber"]
     conn = sqlite3.connect("cafebuddy.db")
     cur = conn.cursor()
     query = "DELETE FROM people WHERE table_no = {}".format(table_no)
