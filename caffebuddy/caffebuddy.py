@@ -1,6 +1,10 @@
 from flask import Flask, render_template
-import pandas as pd
+#import pandas as pd
 import sqlite3
+from flask import Flask
+from flask import render_template
+from flask import request
+import models as dbHandler
 
 app = Flask(__name__)
 
@@ -8,9 +12,9 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello World!'
 
-@app.route('/kate')
+@app.route('/kate', methods=['POST', 'GET'])
 def kate_page():
-    conn = sqlite3.connect("C:/Users/murta/PycharmProjects/caffebuddy/cafebuddy.db")
+    conn = sqlite3.connect("cafebuddy.db")
     # conn.row_factory = sql.Row
     cur = conn.cursor()
     cur.execute("SELECT * FROM people")
@@ -28,6 +32,20 @@ def kate_page():
     # return render_template('kate.html', user=user_details)
     # return df.to_html()
     # return "kates page"
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def home():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        dbHandler.insertUser(username, password)
+        users = dbHandler.retrieveUsers()
+        return render_template('index.html', users=users)
+
+    else:
+        return render_template('index.html')
+
 
 if __name__ == '__main__':
     app.run()
