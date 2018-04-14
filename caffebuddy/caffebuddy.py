@@ -24,7 +24,30 @@ class People(db.Model):
 def hello_world():
     return 'Hello World!'
 
+<<<<<<< HEAD
 #
+=======
+@app.route('/kate')
+def kate_page():
+    conn = sqlite3.connect("cafebuddy.db")
+    # conn.row_factory = sql.Row
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM people")
+
+    return render_template("kate.html", items = cur.fetchall())
+    # cur.close()
+    # conn.close()
+    # df = pd.read_csv('people')
+    # table = pd.read_csv("C:/Users/murta/PycharmProjects/caffebuddy/people")
+    # return render_template("kate.html", data=table.to_html())
+    # user_details = {
+    #     'name': 'Murtaza',
+    #     'table': '2'
+    # }
+    # return render_template('kate.html', user=user_details)
+    # return df.to_html()
+    # return "kates page"
+>>>>>>> b60a740727fc83c866d98aaff9174f6a2cce3d30
 
 if __name__ == '__main__':
     app.run()
