@@ -176,9 +176,12 @@ def preferences():
             }
         )
 @app.route('/menu')
-
 def menu():
     return render_template("menu.html")
+    
+@app.route('/pancakes')
+def pancakes():
+	return render_template("Pancakes.html")
 
 if __name__ == '__main__':
     app.run()
