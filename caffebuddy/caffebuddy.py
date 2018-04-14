@@ -209,10 +209,14 @@ def preferences():
 @app.route('/menu')
 def menu():
     return render_template("menu.html")
-    
+
 @app.route('/pancakes')
 def pancakes():
     return render_template("Pancakes.html")
+
+@app.route('/bacon')
+def bacon():
+	return render_template("bacon.html")
 
 if __name__ == '__main__':
     app.run()
