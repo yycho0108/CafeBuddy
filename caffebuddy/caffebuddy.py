@@ -98,7 +98,7 @@ def new_table():
     return render_template('table.html')
 
 @app.route('/open_table/<int:table_no>',methods = ['POST', 'GET'])
-def open_table():
+def open_table(table_no):
     if request.method == 'POST':
         result = request.form
         # global table_no
@@ -126,7 +126,7 @@ def result():
         return render_template("result.html",result = result)
 
 @app.route('/exit/<int:table_no>',methods = ['POST', 'GET'])
-def exit():
+def exit(table_no):
     if request.method == 'POST':
         result = request.form
         conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
