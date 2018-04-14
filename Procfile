@@ -1,1 +1,1 @@
-python caffebuddy/caffebuddy.py
+web: gunicorn caffebuddy.caffebuddy:app
