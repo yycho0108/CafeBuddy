@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 
 #import pandas as pd
+import os
 import sqlite3
 from flask import Flask
 from flask import render_template
@@ -8,13 +9,23 @@ from flask import request
 import models as dbHandler
 import psycopg2
 
+from collections import defaultdict
+import json
+
 #import pandas as pd
 from flask_sqlalchemy import SQLAlchemy
 
-
-
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ipbifgmvvhliav:4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e@ec2-107-20-151-189.compute-1.amazonaws.com:5432/d2mo1re4fcqlhr'
+DATABASE_URL = os.environ['DATABASE_URL']
+
+#conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', user='ipbifgmvvhliav', host='ec2-107-20-151'
+#        '-189.compute-1.amazonaws.com',
+#        password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
+
+# ^^NO NEED TO, AND SHOULD AVOID, HARDCODING URL IN CODE:
+# check with heroku config
+
 db = SQLAlchemy(app)
 
 class People(db.Model):
@@ -37,11 +48,9 @@ def kate_page():
         password = request.form['password']
         dbHandler.insertUser(username, password)
         users = dbHandler.retrieveUsers()
-    con = psycopg2.connect(dbname='d2mo1re4fcqlhr', user='ipbifgmvvhliav', host='ec2-107-20-151'
-                                                                                '-189.compute-1.amazonaws.com',
-                           password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
     # conn.row_factory = sql.Row
-    cur = con.cursor()
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
     cur.execute("SELECT * FROM seating")
 
 
@@ -55,7 +64,7 @@ def kate_page():
 
 
     cur.close()
-    con.close()
+    conn.close()
     print(table_map)
     return render_template("list_tables.html", all_tables=table_map)
 
@@ -104,8 +113,9 @@ def open_table(table_no):
         # print("table no set",table_no)
 
     else: 
-        conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
-            user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        #conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
+        #    user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
         cur = conn.cursor()
         query = "DELETE FROM seating WHERE table_no = {}".format(table_no)
         print(query)
@@ -127,8 +137,9 @@ def result():
 def exit(table_no):
     if request.method == 'POST':
         result = request.form
-        conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
-            user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
+        conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        #conn = psycopg2.connect(dbname='d2mo1re4fcqlhr', host='ec2-107-20-151-189.compute-1.amazonaws.com', 
+        #    user='ipbifgmvvhliav', password='4f013680ded4541e46c951b71eb51b07aa53d5a04deab331814a370005cffd3e')
         cur = conn.cursor()
         people = []
         for key, value in result.items():
@@ -148,23 +159,41 @@ def exit(table_no):
 
 @app.route('/preferences',methods = ['POST', 'GET'])
 def preferences():
-    if request.method == 'POST':
-        if request.form['submit'] == "Remove":
-            # remove_from_database()
-            print(request.form['category'])
-            print(request.form['person'])
-        elif request.form['submit'] == "Add":
-            #add_to_database()
-            print(request.form['category'])
-            print(request.form['new_person'])
-        # TODO : commit data to database
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+    cur.execute("SELECT name, relationship FROM people_attr")
+    res = cur.fetchall()
 
-    # TODO : load data from database
-    data = json.dumps({
-        'friend' : ['f1', 'f2'],
-        'acquaintance' : ['a1', 'a2'],
-        'enemy' : ['e1', 'e2']
-        })
+    if request.method == 'POST':
+        form = request.form
+        if form['submit'] == "Remove":
+            query = "DELETE FROM people_attr WHERE name = '{}'".format(form['person'])
+            cur.execute(query)
+            conn.commit()
+        elif form['submit'] == "Add":
+            query = 'INSERT INTO people_attr (name, relationship) values (\'{}\', \'{}\') ON CONFLICT (name) DO UPDATE SET relationship = EXCLUDED.relationship;'\
+                .format(form['new_person'], form['category'])
+            cur.execute(query)
+            conn.commit()
+        elif form['submit'] == "Weight":
+            # TODO : handle weight modifications
+            pass
+
+    # most recent data
+    data = {
+            'friend' : [],
+            'acquaintance' : [],
+            'enemy' : []
+            }
+    for name, rel in res:
+        rel = rel.lower()
+        if rel in data.keys():
+            data[rel].append(name)
+    data = json.dumps(data)
+
+    cur.close()
+    conn.close()
+
     return render_template('preferences.html',
         data=data,
         weight={
@@ -175,13 +204,14 @@ def preferences():
             'enemy' : -2
             }
         )
+
 @app.route('/menu')
 def menu():
     return render_template("menu.html")
 
 @app.route('/pancakes')
 def pancakes():
-	return render_template("Pancakes.html")
+    return render_template("Pancakes.html")
 
 @app.route('/bacon')
 def bacon():
